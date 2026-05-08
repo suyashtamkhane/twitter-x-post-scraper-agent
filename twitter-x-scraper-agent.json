@@ -1,0 +1,51 @@
+{
+  "name": "Twitter X Post Scraper",
+  "description": "AI Agent that scrapes Twitter/X posts on any topic using twitterapi.io and saves results to Airtable",
+  "type": "n8n-personal-agent",
+  "model": "gpt-4o-mini",
+  "tools": [
+    {
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "description": "Search Twitter/X posts using twitterapi.io advanced search",
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.twitterapi.io/twitter/tweet/advanced_search",
+        "queryParameters": [
+          {
+            "name": "queryType",
+            "value": "Top"
+          },
+          {
+            "name": "query",
+            "value": "={{ $fromAI('query', 'The search query for Twitter/X posts') }}"
+          }
+        ],
+        "headerParameters": [
+          {
+            "name": "X-API-Key",
+            "value": "YOUR_TWITTERAPI_IO_KEY"
+          }
+        ]
+      }
+    }
+  ],
+  "instructions": "You are a Twitter/X Post Scraper Agent. When the user gives you a topic, search Twitter/X for top posts about that topic using the HTTP Request tool. Extract tweet_id, url, text, author, likes, retweets, views, and date from the results. Then save each tweet to Airtable using the Airtable tool. Summarize what you found at the end.",
+  "setup": {
+    "requirements": [
+      "twitterapi.io account and API key",
+      "Airtable account with a base named Twitter Trends",
+      "n8n cloud account (free tier works)"
+    ],
+    "airtable_fields": [
+      "tweet_id",
+      "url",
+      "text",
+      "author",
+      "likes",
+      "retweets",
+      "views",
+      "date"
+    ]
+  }
+}
